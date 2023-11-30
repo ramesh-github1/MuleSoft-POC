@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="ac1d4ad2-96be-45c9-8516-158ba46e5504" >
+		<http:request-connection host="dummy.restapiexample.com" />
+	</http:request-config>
+	<flow name="callRESTapiFlow" doc:id="36e37596-96a7-41ed-8632-157c7fabcfa4" >
+		<http:listener doc:name="/GET restAPI" doc:id="779fc2e4-6afa-4ba0-8bf4-c19f9d174525" config-ref="HTTP_Listener_config" path="/restAPI" allowedMethods="GET"/>
+		<http:request method="GET" doc:name="call dummy REST api" doc:id="56fe711a-be15-403e-b90d-b5889bade8fa" config-ref="HTTP_Request_configuration" path="/api/v1/employee"/>
+	</flow>
+</mule>

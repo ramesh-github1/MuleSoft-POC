@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
+	<vm:config name="VM_Config" doc:name="VM Config" doc:id="5fa187e4-386f-4d3c-87bd-2e4a49f366cc" >
+		<vm:queues >
+			<vm:queue queueName="vmQueue" />
+		</vm:queues>
+	</vm:config>
+	<flow name="VM-connectorPublish" doc:id="1359f0f3-0f15-4482-91e1-634a4e2b51a8" doc:description="VM-connector is useful for async communication by publishing the mss into a queue and subscribing to the queue to get the message.&#10;Queues are of two types: transient and persistent.&#10;&#10;&#10;Note: using vm connetor we can also have a synchronous communication(publish Consume connector instead of publish connector).">
+		<http:listener doc:name="/POST  vmconnector/publish demo" doc:id="f6ccfe5d-4860-4a64-b3c3-377c2c356814" config-ref="HTTP_Listener_config" path="vmconnector/publish" allowedMethods="POST"/>
+		<logger level="INFO" doc:name="Logger" doc:id="aabc9460-0fff-4e57-8abc-9eecc35b5f31" message='"Before publishing the message into the queue'/>
+		<vm:publish queueName="vmQueue" doc:name="Publish" doc:id="6d03c8d6-cffd-4aeb-9553-6e1fd52880d5" config-ref="VM_Config"/>
+		<logger level="INFO" doc:name="Logger" doc:id="c46ad491-24f5-4f08-a312-bff1cb46d31c" message="After publishing the messahe to queue"/>
+	</flow>
+	<flow name="VM-connectorSubscribeFlow" doc:id="7c730510-202b-4143-a14d-378008ca7e08" >
+		<vm:listener queueName="vmQueue" doc:name="VMListener" doc:id="5a9c8109-9b5b-4c5c-b826-2f7a9ec2b75e" config-ref="VM_Config"/>
+		<logger level="INFO" doc:name="Logger" doc:id="ba8ff7ac-cd90-458b-8d5a-9aae10c59932" message="#[payload]"/>
+	</flow>
+	<flow name="VM-connectorSync" doc:id="98c491b0-f101-42e2-9b05-dc1abcbe13e3" doc:description="VM-connector is useful for async communication by publishing the mss into a queue and subscribing to the queue to get the message.&#10;Queues are of two types: transient and persistent.&#10;&#10;&#10;Note: using vm connetor we can also have a synchronous communication(publish Consume connector instead of publish connector)." >
+		<http:listener doc:name="/POST  vmconnector/Sync demo" doc:id="de1bf82b-e277-47e5-a1df-279dd4059aee" config-ref="HTTP_Listener_config" path="vmconnector/sync" allowedMethods="POST" />
+		<logger level="INFO" doc:name="Logger" doc:id="f17aed4b-a817-488d-8851-1c452cd0b3a2" message='"Before publishing the message into the queue' />
+		<vm:publish-consume queueName="vmQueue" doc:name="Publish consume" doc:id="50f202ee-a9ab-47c9-b77f-5d4919e0987b" config-ref="VM_Config"/>
+		<logger level="INFO" doc:name="Logger1" doc:id="30343436-2ed4-4465-94ee-fe5f0503c04a" message="After publishing the messahe to queue" />
+	</flow>
+</mule>

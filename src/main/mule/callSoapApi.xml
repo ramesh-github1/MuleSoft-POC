@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="a14df624-a5d5-4ed3-a655-8c4d20dedbec" >
+		<wsc:connection wsdlLocation="http://www.dneonline.com/calculator.asmx?wsdl" port="CalculatorSoap" address="http://www.dneonline.com/calculator.asmx" service="Calculator">
+			<wsc:web-service-security actor="http://schemas.xmlsoap.org/soap/actor/next" />
+		</wsc:connection>
+	</wsc:config>
+	<flow name="callSoapApiFlow" doc:id="ac0e94a0-94be-4144-bcd7-6b985d503007" doc:description='This Mule Flow heps know to understand how to consume a soap web service using "Web service Consumer" module.&#10;&#10;In this flow the Consume connector requires two inputs (int1 and int2) to return the sum of the number.&#10;&#10;Note: SOAP API accepts only xml format. So we have to transform it to xml before passing to Consume connector.'>
+		<http:listener doc:name="/GET soapAPI/addTwoNumber" doc:id="4e665bc9-f5bf-46ff-9a93-3d59dd43d923" config-ref="HTTP_Listener_config" path="/soapAPI/addTwoNumber"/>
+		<set-variable value="#[attributes.queryParams.num1]" doc:name="Set Variable" doc:id="5b3a1cbe-b4d9-4a5b-b983-9826388a572e" variableName="num1"/>
+		<set-variable value="#[attributes.queryParams.num2]" doc:name="Set Variable" doc:id="915f9c11-b97e-4d80-9363-e147b507dc1e" variableName="num2"/>
+		<ee:transform doc:name="Transform Message" doc:id="4848608e-46e7-43f2-b5af-7de70bad5cc7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://tempuri.org/
+---
+{
+	ns0#Add: {
+		ns0#intA: vars.num1 as Number,
+		ns0#intB: vars.num2 as Number
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume doc:name="Consume" doc:id="a2d43915-5e53-4c24-aa0f-e3d98149cc17" config-ref="Web_Service_Consumer_Config" operation="Add"/>
+		<logger level="INFO" doc:name="Logger" doc:id="c00fa372-5280-4ab4-9c61-e8e825ae69fa" message='#[%dw 2.0&#10;ns ns0 http://tempuri.org/&#10;---&#10;payload.body.ns0#AddResponse]'/>
+	</flow>
+</mule>

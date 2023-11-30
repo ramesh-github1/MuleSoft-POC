@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<file:config name="File_Config" doc:name="File Config" doc:id="f58ebde9-64f9-463d-b793-82ea9413c030" >
+		<file:connection workingDir="C:\Users\rv148\Desktop\temp\mule-file\ip" />
+	</file:config>
+<!-- [STUDIO:"fileConnectorFlow"]	<flow name="fileConnectorFlow" doc:id="04b0021f-882a-4c29-aac6-63a488d91025" doc:description="The File connetor helps u to look for a particular directory/file/updates to a file and perform some processing based on that.">
+		<file:listener doc:name="On New or Updated File" doc:id="236eebf8-99da-42bf-a567-afaef1488632" config-ref="File_Config" directory="C:\Users\rv148\Desktop\temp\mule-file\ip" moveToDirectory="C:\Users\rv148\Desktop\temp\mule-file\op">
+			<scheduling-strategy >
+				<fixed-frequency timeUnit="SECONDS"/>
+			</scheduling-strategy>
+		</file:listener>
+		<logger level="INFO" doc:name="Logger" doc:id="853d4fe4-e074-4351-90df-8e70c7781dd1" message="#[payload&#93;"/>
+	</flow> [STUDIO] -->
+</mule>
