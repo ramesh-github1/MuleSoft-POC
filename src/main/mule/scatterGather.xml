@@ -5,7 +5,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	<flow name="scatterGatherFlow" doc:id="91efe33b-54a9-44d4-8770-ae35f81ffa19" doc:description="scatterGather passes the mule message to all the procesflow within the scatter Gather and process them parallely  in separarte threads and returns the combined mssg only after all the process is completed.&#10;&#10;minimum of two process flow is required in scatterGather.">
-		<http:listener doc:name="/GET" doc:id="dc5caa4a-98f8-4b54-8d23-8eed399b7f84" config-ref="HTTP_Listener_config1" path="/scatterGather"/>
+		<http:listener doc:name="/GET" doc:id="dc5caa4a-98f8-4b54-8d23-8eed399b7f84" config-ref="HTTP_Listener_config" path="/scatterGather"/>
 		<set-payload value='{"message" : "Good Night"}' doc:name="Set Payload" doc:id="cd687e74-5406-4268-b11c-c68c4f9d61fb" />
 		<logger level="INFO" doc:name="Logger" doc:id="d254e052-080e-49d6-9e58-a5394d32e3d6" message='"Logger Message befor scatterGather......."'/>
 		<scatter-gather doc:name="Scatter-Gather" doc:id="540398fb-541a-4856-9f8a-c4d871602bf3" >

@@ -5,7 +5,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	<flow name="firstSuccessfulRouterFlow" doc:id="4fafd811-91fd-451a-8e12-2936c0aad87c" doc:description="first Successful router iterates through all the processor untill one of the rought is success.&#10;If the configured procesing routes fails/throws an error, then the  next processing routes starts.">
-		<http:listener doc:name="Listener" doc:id="f48cf157-7205-44e7-8c8c-535c1da91ac5" config-ref="HTTP_Listener_config1" path="/firstSuccessfull"/>
+		<http:listener doc:name="Listener" doc:id="f48cf157-7205-44e7-8c8c-535c1da91ac5" config-ref="HTTP_Listener_config" path="/firstSuccessfull"/>
 		<first-successful doc:name="First Successful" doc:id="5113b48d-bb9c-4f3f-b278-4e877f14e4f9" >
 			<route >
 				<logger level="INFO" doc:name="Logger1" doc:id="b16ba1cd-9a50-42b8-a318-caa3569aad13" message="Logger1"/>

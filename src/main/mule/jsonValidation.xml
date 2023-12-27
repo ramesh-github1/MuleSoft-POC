@@ -6,7 +6,7 @@
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
 	<flow name="jsonValidationFlow" doc:id="6bd9fea4-607d-437b-a060-2080c3619750" >
-		<http:listener doc:name="POST /jsonValidate" doc:id="d47af867-4647-4fcb-a7d5-c8f56cf67d73" config-ref="HTTP_Listener_config1" path="/jsonValidate" allowedMethods="POST"/>
+		<http:listener doc:name="POST /jsonValidate" doc:id="d47af867-4647-4fcb-a7d5-c8f56cf67d73" config-ref="HTTP_Listener_config" path="/jsonValidate" allowedMethods="POST"/>
 		<json:validate-schema doc:name="Validate schema" doc:id="82146583-3773-4cbb-86c8-5fcdc21af846" schema="jsonSchema.json"/>
 		<logger level="INFO" doc:name="Logger" doc:id="576f8403-7d11-4ad9-a9f3-a519739b7996" message="valid schema"/>
 	</flow>

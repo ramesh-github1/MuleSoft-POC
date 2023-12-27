@@ -7,7 +7,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
 	<validation:config name="Validation_Config" doc:name="Validation Config" doc:id="9bd1bee5-ea88-4956-943d-fd4766ac91f6" />
 	<flow name="errorHandlingMainFlow" doc:id="7584aa97-ef46-43b5-91e5-6518e8d9708b" >
-		<http:listener doc:name="/GET errorHandling" doc:id="8209f11e-fdd7-4281-a053-ec6d7d8c6477" config-ref="HTTP_Listener_config1" path="/errorHandling"/>
+		<http:listener doc:name="/GET errorHandling" doc:id="8209f11e-fdd7-4281-a053-ec6d7d8c6477" config-ref="HTTP_Listener_config" path="/errorHandling"/>
 		<flow-ref doc:name="Flow Reference" doc:id="d48002d9-3371-4d3c-acc6-a5bd38335c2a" name="errorHandlingPrivateFlow"/>
 		<logger level="INFO" doc:name="Logger" doc:id="e50ec240-2cb9-4b31-a80b-1408057b34dd" message='"payload received from the private flow : " #[payload]'/>
 		<set-payload value="Success from the mainFlow" doc:name="Success from the mainFlow" doc:id="b556d64e-2525-46d8-8a1f-31c73468a904" />

@@ -11,7 +11,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
 		</vm:queues>
 	</vm:config>
 	<flow name="VM-connectorPublish" doc:id="1359f0f3-0f15-4482-91e1-634a4e2b51a8" doc:description="VM-connector is useful for async communication by publishing the mss into a queue and subscribing to the queue to get the message.&#10;Queues are of two types: transient and persistent.&#10;&#10;&#10;Note: using vm connetor we can also have a synchronous communication(publish Consume connector instead of publish connector).">
-		<http:listener doc:name="/POST  vmconnector/publish demo" doc:id="f6ccfe5d-4860-4a64-b3c3-377c2c356814" config-ref="HTTP_Listener_config1" path="vmconnector/publish" allowedMethods="POST"/>
+		<http:listener doc:name="/POST  vmconnector/publish demo" doc:id="f6ccfe5d-4860-4a64-b3c3-377c2c356814" config-ref="HTTP_Listener_config" path="vmconnector/publish" allowedMethods="POST"/>
 		<logger level="INFO" doc:name="Logger" doc:id="aabc9460-0fff-4e57-8abc-9eecc35b5f31" message='"Before publishing the message into the queue'/>
 		<vm:publish queueName="vmQueue" doc:name="Publish" doc:id="6d03c8d6-cffd-4aeb-9553-6e1fd52880d5" config-ref="VM_Config"/>
 		<logger level="INFO" doc:name="Logger" doc:id="c46ad491-24f5-4f08-a312-bff1cb46d31c" message="After publishing the messahe to queue"/>
