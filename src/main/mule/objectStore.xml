@@ -7,7 +7,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
 	<os:object-store name="Object_store_demo" doc:name="Object store" doc:id="9e11fc67-b941-45cf-b6a6-57b6735d38c8" />
 	<flow name="objectStoreFlow" doc:id="77f03a70-0676-4fc9-a84b-d3ce914d2719" >
-		<http:listener doc:name="/GET objectStore" doc:id="48286308-2bbb-4e18-b0c7-4fb29b825760" config-ref="HTTP_Listener_config" doc:description="Object store helps you to store key/value pairs." path="/objectStore" allowedMethods="POST"/>
+		<http:listener doc:name="/GET objectStore" doc:id="48286308-2bbb-4e18-b0c7-4fb29b825760" config-ref="HTTP_Listener_config1" doc:description="Object store helps you to store key/value pairs." path="/objectStore" allowedMethods="POST"/>
 		<set-variable value="#[attributes.queryParams.username]" doc:name="key" doc:id="581fd892-d3e8-4c1d-90b3-4b42ae5c75c7" variableName="key"/>
 		<set-variable value="#[attributes.queryParams.mail]" doc:name="value" doc:id="05305220-962c-414f-a439-aa58ef9f7292" variableName="value" />
 		<os:store doc:name="Store" doc:id="99a39955-b25b-4105-a11b-142990d13f3c" key="#[vars.key]" objectStore="Object_store_demo">
@@ -15,7 +15,7 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 		</os:store>
 	</flow>
 	<flow name="objectRetriveFlow" doc:id="8b9dc067-9d7b-4689-a5c2-c46e65849d0f" >
-		<http:listener doc:name="Listener" doc:id="d4710c03-4282-440c-bcce-7bcae18d9e40" config-ref="HTTP_Listener_config" path="/objectRetrive"/>
+		<http:listener doc:name="Listener" doc:id="d4710c03-4282-440c-bcce-7bcae18d9e40" config-ref="HTTP_Listener_config1" path="/objectRetrive"/>
 		<set-variable value="#[attributes.queryParams.username]" doc:name="Key" doc:id="13d04f4f-67e3-4e92-ac7b-47fe10afe15b" variableName="username"/>
 		<os:retrieve doc:name="Retrieve" doc:id="d53f6a1a-85f7-42ae-81a5-55bce7be6356" key="#[vars.username]" objectStore="Object_store_demo">
 			<os:default-value ><![CDATA["username does not exist."]]></os:default-value>

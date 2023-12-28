@@ -7,7 +7,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<ee:object-store-caching-strategy name="Caching_Strategy" doc:name="Caching Strategy" doc:id="3d55051a-0ecb-4fc2-88cd-ada087f6569c" keyGenerationExpression="#[vars.id]" />
 	<flow name="cacheFlow" doc:id="30ce3245-ca1a-4445-8238-01db0feb245e" doc:description="cache is a storage in RAM. For every request we need to make call the thirdy party/other API every time. Insted we can cache it in the memory and fetch. ">
-		<http:listener doc:name="/cache GET" doc:id="195d83f6-d7a6-4720-a28c-f98b5d5f51a4" config-ref="HTTP_Listener_config" path="/cache" allowedMethods="GET"/>
+		<http:listener doc:name="/cache GET" doc:id="195d83f6-d7a6-4720-a28c-f98b5d5f51a4" config-ref="HTTP_Listener_config1" path="/cache" allowedMethods="GET"/>
 		<set-variable value="#[attributes.queryParams.id]" doc:name="Set Variable" doc:id="14563ec7-0bc1-4258-897f-19914148fc78" variableName="id"/>
 		<ee:cache doc:name="Cache" doc:id="1f9299f2-7b87-48e3-9a73-48c4b567cfbf" cachingStrategy-ref="Caching_Strategy">
 			<http:request method="GET" doc:name="Request" doc:id="3e5d2f80-fa5d-4d27-b031-b8f99bbd343a" config-ref="HTTP_Request_configuration_restAPI" path="/v1/employee/{id}">

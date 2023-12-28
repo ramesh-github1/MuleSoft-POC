@@ -5,7 +5,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	<flow name="untillSuccessfullFlow" doc:id="aedaf749-ea0b-4b19-8965-a7269cbd6f92" >
-		<http:listener doc:name="GET /untillSuccessfull" doc:id="589e78ee-8143-423a-a9c6-da1cc94f948b" config-ref="HTTP_Listener_config" path="/untillSuccessfull" allowedMethods="GET"/>
+		<http:listener doc:name="GET /untillSuccessfull" doc:id="589e78ee-8143-423a-a9c6-da1cc94f948b" config-ref="HTTP_Listener_config1" path="/untillSuccessfull" allowedMethods="GET"/>
 		<set-variable value="#[attributes.queryParams.id]" doc:name="Set Variable" doc:id="75c6edff-4529-4539-bfd8-2c8a4959b099" variableName="id"/>
 		<until-successful maxRetries="5" doc:name="Until Successful" doc:id="46d9c624-03ca-4f53-9c21-04787ad16985" millisBetweenRetries="6000">
 			<http:request method="GET" doc:name="Request" doc:id="358da383-c8a3-4b94-84ba-1b6c3fa0921e" config-ref="HTTP_Request_configuration_restAPI" path="/v1/employee/{id}">
