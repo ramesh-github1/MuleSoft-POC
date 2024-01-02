@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<flow name="scatterGatherFlow" doc:id="91efe33b-54a9-44d4-8770-ae35f81ffa19" doc:description="scatterGather passes the mule message to all the procesflow within the scatter Gather and process them parallely  in separarte threads and returns the combined mssg only after all the process is completed.&#10;&#10;minimum of two process flow is required in scatterGather.">
 		<http:listener doc:name="/GET" doc:id="dc5caa4a-98f8-4b54-8d23-8eed399b7f84" config-ref="HTTP_Listener_config1" path="/scatterGather"/>
 		<set-payload value='{"message" : "Good Night"}' doc:name="Set Payload" doc:id="cd687e74-5406-4268-b11c-c68c4f9d61fb" />
@@ -14,14 +15,22 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 				<set-payload value='{"message" : "Good NIght from scatterGather flow1"}' doc:name="Set Payload" doc:id="cf58d522-c6e5-4561-afca-76504f37f2d5" />
 			</route>
 			<route >
-				<logger level="INFO" doc:name="Logger" doc:id="63369963-ecf4-4987-9e60-1fefed6a6f99" message='"Logger2 Message befor scatterGather......."'/>
+				<logger level="INFO" doc:name="Logger" doc:id="63369963-ecf4-4987-9e60-1fefed6a6f99" message='"Logger2  Message within scatterGather......"'/>
 				<set-payload value='{"message" : "Good NIght from scatterGather flow2"}' doc:name="Set Payload" doc:id="9298554b-c183-4647-bdcb-57be870e38d9" />
 			</route>
 			<route >
-				<logger level="INFO" doc:name="Logger" doc:id="83f40416-041f-484c-9b46-2af7f633319f" message='"Logger3 Message befor scatterGather......."'/>
+				<logger level="INFO" doc:name="Logger" doc:id="83f40416-041f-484c-9b46-2af7f633319f" message='"Logger3  Message within scatterGather....."'/>
 				<set-payload value='{"message" : "Good NIght from scatterGather flow3"}' doc:name="Set Payload" doc:id="7590eea0-ffc0-4f8b-972f-128a9784efb2" />
 			</route>
 		</scatter-gather>
+		<ee:transform doc:name="Transform Message" doc:id="6c1c3e7b-6add-4384-8c0c-2074a0180f14" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="d48070fa-b0cd-4678-be3c-3f7d4c76ee09" />
 		<logger level="INFO" doc:name="Logger" doc:id="07b5c06a-6a34-4aa3-a66c-d35132b3aae0" message='"Logger Message after scatterGather......."'/>
 	</flow>

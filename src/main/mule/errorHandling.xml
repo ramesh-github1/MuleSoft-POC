@@ -12,21 +12,24 @@ http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mu
 		<logger level="INFO" doc:name="Logger" doc:id="e50ec240-2cb9-4b31-a80b-1408057b34dd" message='"payload received from the private flow : " #[payload]'/>
 		<set-payload value="Success from the mainFlow" doc:name="Success from the mainFlow" doc:id="b556d64e-2525-46d8-8a1f-31c73468a904" />
 		<error-handler >
-			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="c6bde629-dcc8-4237-b16d-97714bf0d44e" >
+<!-- [STUDIO:"On Error Continue"]			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="c6bde629-dcc8-4237-b16d-97714bf0d44e" >
 				<set-payload value='"Error mian Flow"' doc:name='"Error mian Flow"' doc:id="38a46ba7-5bb9-47fa-9ca7-da0ed5cd3ebb" />
-			</on-error-continue>
+			</on-error-continue> [STUDIO] -->
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="a1b3e310-f4d0-4644-82f8-b839d3402726" >
+				<set-payload value='"Error in the main flow"' doc:name="Set Payload" doc:id="e12e1a92-a0f1-4661-b16e-b47707dcfeb2" />
+			</on-error-propagate>
 		</error-handler>
 	</flow>
 	<flow name="errorHandlingPrivateFlow" doc:id="6b77e06d-9e00-4b43-a7d7-5a7f93819bdd" >
-		<set-payload value="500" doc:name="Success from the private flow" doc:id="a50dd27c-f1ae-4dd8-8641-b9093de47c31" />
+		<set-payload value="256" doc:name="Success from the private flow" doc:id="a50dd27c-f1ae-4dd8-8641-b9093de47c31" />
 		<validation:is-number numberType="INTEGER" doc:name="Is number" doc:id="b0f7f383-dbc4-4afb-a54a-0019d35a6e81" config-ref="Validation_Config" value="#[payload]" minValue="0" maxValue="100" message='"The incomming payload is not number..."'/>
 		<error-handler >
-			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="50c7452c-d811-4c16-9542-9c1b070b102a" type="VALIDATION:INVALID_NUMBER">
+<!-- [STUDIO:"On Error Propagate"]			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="50c7452c-d811-4c16-9542-9c1b070b102a" type="VALIDATION:INVALID_NUMBER">
 				<set-payload value='"Error private  Flow"' doc:name='"Error private  Flow"' doc:id="bb133d54-6977-4167-bf22-e9f9fe48fdbd" />
-			</on-error-propagate>
-<!-- [STUDIO:"On Error Continue"]			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="220b5222-f70b-41a3-a036-b72b27356cc6" >
+			</on-error-propagate> [STUDIO] -->
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="220b5222-f70b-41a3-a036-b72b27356cc6" >
 				<set-payload value='"Error private Flow"' doc:name='"Error privateFlow"' doc:id="3a674efd-09ac-4fcf-83be-633e1c2898a7" />
-			</on-error-continue> [STUDIO] -->
+			</on-error-continue>
 		</error-handler>
 	</flow>
 </mule>
