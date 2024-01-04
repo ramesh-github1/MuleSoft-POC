@@ -28,7 +28,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
-payload]]></ee:set-payload>
+flatten(valuesOf(payload) map ((item, index) -> item.*payload))]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="d48070fa-b0cd-4678-be3c-3f7d4c76ee09" />

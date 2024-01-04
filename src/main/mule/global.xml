@@ -10,10 +10,10 @@ http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/
 		<http:listener-connection host="${host}" port="${port}" />
 	</http:listener-config>
 	<http:request-config name="HTTP_Request_configuration_restAPI" doc:name="HTTP Request configuration" doc:id="5ddaaa55-bc17-453f-9157-e61b561a2297" basePath="${rest.basepath}" >
-		<http:request-connection protocol="HTTPS" host="${rest.host}"/>
+		<http:request-connection host="${rest.host}"/>
 	</http:request-config>
 	<wsc:config name="Web_Service_Consumer_Config1" doc:name="Web Service Consumer Config" doc:id="807a47af-408a-4db9-9050-2aa5f5126104" >
-		<wsc:connection wsdlLocation="${wsdl.loc}" service="${wsdl.service}" port="${wsdl.port}" address="${wsdl.address}">
+		<wsc:connection wsdlLocation="http://www.dneonline.com/calculator.asmx?wsdl" service="Calculator" port="CalculatorSoap" address="http://www.dneonline.com/calculator.asmx">
 			<wsc:web-service-security actor="http://schemas.xmlsoap.org/soap/actor/next" />
 		</wsc:connection>
 	</wsc:config>
