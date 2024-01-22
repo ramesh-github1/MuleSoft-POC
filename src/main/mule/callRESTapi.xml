@@ -5,7 +5,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	<flow name="callRESTapiFlow" doc:id="36e37596-96a7-41ed-8632-157c7fabcfa4" >
-		<http:listener doc:name="/GET restAPI" doc:id="779fc2e4-6afa-4ba0-8bf4-c19f9d174525" config-ref="HTTP_Listener_config1" path="/restAPI" allowedMethods="GET"/>
-		<http:request method="GET" doc:name="call dummy REST api" doc:id="56fe711a-be15-403e-b90d-b5889bade8fa" path="/v1/employees" config-ref="HTTP_Request_configuration_restAPI"/>
+		<http:listener doc:name="/GET restAPI" doc:id="779fc2e4-6afa-4ba0-8bf4-c19f9d174525" config-ref="HTTP_Listener_config1" path="/restAPI" allowedMethods="GET">
+			<http:error-response >
+				<http:body ><![CDATA[#[output application/json --- error.errorMessage]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<http:request method="GET" doc:name="call dummy REST api" doc:id="56fe711a-be15-403e-b90d-b5889bade8fa" path="/v1/employee" config-ref="HTTP_Request_configuration_restAPI"/>
 	</flow>
 </mule>

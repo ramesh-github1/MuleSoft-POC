@@ -11,11 +11,11 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<ee:transform doc:name="Transform Message" doc:id="0e35e87f-9f00-45f1-b164-1821167efa3b" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
-{
-}]]></ee:set-payload>
+payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="d7c14415-652a-45fc-8c53-f9cded14d7ac" />
 	</flow>
 </mule>
