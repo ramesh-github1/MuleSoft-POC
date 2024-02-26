@@ -24,7 +24,7 @@ payload]]></ee:set-payload>
 		<logger level="INFO" doc:name="Logger" doc:id="18aae234-2a99-41a2-8295-cf7b2c1b4f80" message="payload befor for each scop: #[payload]"/>
 		<foreach doc:name="For Each" doc:id="faa1fdf1-164d-43aa-bb88-30b5520dcb71" >
 			<logger level="INFO" doc:name="Logger" doc:id="4f7c7ad3-6c02-47da-be88-14de2070bc11" message=" #[payload]" />
-			<set-variable value='#[payload.empName ++ ".csv"]' doc:name="Set Variable" doc:id="e4cdf005-7366-41f6-b7ba-fd400c335271" variableName="opFilename"/>
+			<set-variable value='#[payload.empName as String ++ ".csv"]' doc:name="Set Variable" doc:id="e4cdf005-7366-41f6-b7ba-fd400c335271" variableName="opFilename"/>
 			<ee:transform doc:name="Transform Message" doc:id="7abfc6b1-e340-4c27-9c3a-1cc99c221603" >
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
@@ -43,7 +43,7 @@ payload]]></ee:set-payload>
 		<set-payload value="#[[10,20,30]]" doc:name="Set Payload" doc:id="c0e248d9-934f-41d0-9592-a3b65331df06" />
 		<logger level="INFO" doc:name="Logger" doc:id="15f74aed-9e50-4e7f-afec-2d8387493e10" message="payload before foreach scopr #[payload]"/>
 		<foreach doc:name="For Each" doc:id="77ff2611-6f8d-4deb-b24c-1bf3e13ba8f3" >
-			<set-payload value="#[payload + 100 as Number]" doc:name="Set Payload" doc:id="471b3294-163a-4551-80d7-2498295e76d7" />
+			<set-payload value="#[payload + (100 as Number)]" doc:name="Set Payload" doc:id="471b3294-163a-4551-80d7-2498295e76d7" />
 			<logger level="INFO" doc:name="Logger" doc:id="38613c93-c462-4815-a6b8-58b78445f6af" message="#[payload]"/>
 		</foreach>
 		<logger level="INFO" doc:name="Logger" doc:id="3427d7ce-1768-409b-a53d-e45c23693646" message="payload after foreach scopr #[payload]"/>

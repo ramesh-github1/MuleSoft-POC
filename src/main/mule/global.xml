@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
 	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns:http="http://www.mulesoft.org/schema/mule/http"
 	xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd 
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
 http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
 	<http:listener-config name="HTTP_Listener_config1" doc:name="HTTP Listener config" doc:id="99ca3a45-f216-4cd8-9d01-4e93cbfa5d7e" >
 		<http:listener-connection host="${host}" port="${port}" />
 	</http:listener-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="692fa98b-693d-41b9-a5c2-ee0f13d901f4" >
+		<file:connection workingDir="C:\Users\rv148\Desktop\temp\mule-file\ip" />
+	</file:config>
 	<http:request-config name="HTTP_Request_configuration_restAPI" doc:name="HTTP Request configuration" doc:id="5ddaaa55-bc17-453f-9157-e61b561a2297" basePath="${rest.basepath}" >
 		<http:request-connection host="${rest.host}"/>
 	</http:request-config>

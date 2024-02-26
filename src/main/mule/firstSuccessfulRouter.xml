@@ -4,19 +4,19 @@
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
-	<flow name="firstSuccessfulRouterFlow" doc:id="4fafd811-91fd-451a-8e12-2936c0aad87c" doc:description="first Successful router iterates through all the processor untill one of the rought is success.&#10;If the configured procesing routes fails/throws an error, then the  next processing routes starts.">
+	<flow name="firstSuccessfulRouterFlow" doc:id="4fafd811-91fd-451a-8e12-2936c0aad87c" doc:description="first Successful router iterates through all the processor untill one of the route is success.&#10;If the configured procesing routes fails/throws an error, then the  next processing routes starts.">
 		<http:listener doc:name="Listener" doc:id="f48cf157-7205-44e7-8c8c-535c1da91ac5" config-ref="HTTP_Listener_config1" path="/firstSuccessfull"/>
-		<first-successful doc:name="First Successful" doc:id="5113b48d-bb9c-4f3f-b278-4e877f14e4f9" >
-			<route >
-				<logger level="INFO" doc:name="Logger1" doc:id="b16ba1cd-9a50-42b8-a318-caa3569aad13" message="Logger1"/>
-				<logger level="INFO" doc:name="Logger1.1" doc:id="f91a8229-b8b3-4900-84a5-a01bc11ad1eb" message="Logger1.1"/>
-				<raise-error doc:name="Raise error" doc:id="4a6267d5-a018-447a-8eb8-eb5852d571a8" type="TRANSFORMATION"/>
+		<first-successful doc:name="First Successful" doc:id="5113b48d-bb9c-4f3f-b278-4e877f14e4f9">
+			<route>
+				<logger level="INFO" doc:name="Logger1" doc:id="b16ba1cd-9a50-42b8-a318-caa3569aad13" message="Logger1" />
+				<logger level="INFO" doc:name="Logger1.1" doc:id="f91a8229-b8b3-4900-84a5-a01bc11ad1eb" message="Logger1.1" />
+				<raise-error doc:name="Raise error" doc:id="4a6267d5-a018-447a-8eb8-eb5852d571a8" type="TRANSFORMATION" />
 			</route>
-			<route >
-				<logger level="INFO" doc:name="Logger2" doc:id="50751435-9e6b-499f-948f-9662022cc916" message="Logger2"/>
+			<route>
+				<logger level="INFO" doc:name="Logger2" doc:id="50751435-9e6b-499f-948f-9662022cc916" message="Logger2" />
 			</route>
-			<route >
-				<logger level="INFO" doc:name="Logger3" doc:id="ea667655-e8ea-4d06-bf2a-99566cb4eb41" message="Logger3"/>
+			<route>
+				<logger level="INFO" doc:name="Logger3" doc:id="ea667655-e8ea-4d06-bf2a-99566cb4eb41" message="Logger3" />
 			</route>
 		</first-successful>
 	</flow>
