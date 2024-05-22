@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
-	<os:object-store name="Object_store_demo" doc:name="Object store" doc:id="9e11fc67-b941-45cf-b6a6-57b6735d38c8" />
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<os:object-store name="Object_store_demo" doc:name="Object store" doc:id="9e11fc67-b941-45cf-b6a6-57b6735d38c8" entryTtl="01" expirationInterval="30" expirationIntervalUnit="SECONDS"/>
 	<flow name="objectStoreFlow" doc:id="77f03a70-0676-4fc9-a84b-d3ce914d2719" >
 		<http:listener doc:name="/GET objectStore" doc:id="48286308-2bbb-4e18-b0c7-4fb29b825760" config-ref="HTTP_Listener_config1" doc:description="Object store helps you to store key/value pairs." path="/objectStore" allowedMethods="POST"/>
 		<set-variable value="#[attributes.queryParams.username]" doc:name="key" doc:id="581fd892-d3e8-4c1d-90b3-4b42ae5c75c7" variableName="key"/>
@@ -20,5 +21,29 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 		<os:retrieve doc:name="Retrieve" doc:id="d53f6a1a-85f7-42ae-81a5-55bce7be6356" key="#[vars.username]" objectStore="Object_store_demo">
 			<os:default-value ><![CDATA["username does not exist."]]></os:default-value>
 		</os:retrieve>
+	</flow>
+	<flow name="objectStoreFlowTTL" doc:id="92f3d231-9a73-468a-9219-31f456b8e683" doc:description="entry TLL is the time up to which the store value is valid and expiration time  is the time interval in which a mule thread will run to remove the expired/invalid data in the object store.">
+		<scheduler doc:name="Scheduler" doc:id="f818b2b2-db86-4a2e-82ee-43d7f8e1973b" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="10" timeUnit="HOURS"/>
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="d64be9f5-3d12-4759-bb28-f9c43c85a996" message='"Object store TTL started"'/>
+		<os:store doc:name="Store" doc:id="9a622995-1ba3-4add-a51f-3bfb987e8550" objectStore="Object_store_demo" key="os">
+			<os:value ><![CDATA["test payload for object store"]]></os:value>
+		</os:store>
+		<ee:transform doc:name="Transform Message" doc:id="aeba72c5-09a6-4ef2-9d91-7fd4abd1fd47" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import * from dw::Runtime
+output application/json
+---
+{} wait(12000)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<os:retrieve doc:name="Retrieve" doc:id="bf49117c-46ad-4b2d-a426-17cf13f66753" key="os" objectStore="Object_store_demo">
+			<os:default-value ><![CDATA[0]]></os:default-value>
+		</os:retrieve>
+		<logger level="INFO" doc:name="Logger" doc:id="f74eb888-469b-46b3-a665-1a3ddb2be0fe" message="#[payload]"/>
 	</flow>
 </mule>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+	xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="WaterMarkingDemoFlow" doc:id="5aadba7f-4651-468f-9dcc-867538e0220c" >
+		<scheduler doc:name="Scheduler" doc:id="94eec4d8-2494-4f48-acef-52ab12eafc77" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="60" timeUnit="SECONDS"/>
+			</scheduling-strategy>
+		</scheduler>
+		<os:retrieve doc:name="Retrieve" doc:id="bf074c90-a347-4d25-afce-e33ba72fc975" key="id" objectStore="Object_store_demo">
+			<os:default-value ><![CDATA[0]]></os:default-value>
+		</os:retrieve>
+		<file:read doc:name="Read" doc:id="d22cf2aa-c938-44c8-a678-cda7022ef9d8" config-ref="File_Config" path="C:\Users\rv148\Desktop\temp\mule-file\ip\EMPLOYEE.xlsx"/>
+		<set-variable value="#[sizeOf(payload)]" doc:name="Set Variable" doc:id="f515a674-baef-4adf-a7c4-c85c56f4ae19" variableName="SizeOfPayload"/>
+		<choice doc:name="Choice" doc:id="66ec18b8-0a28-47bd-8e32-cc429ab7f280" >
+			<when expression="#[! isEmpty(vars.SizeOfPayload)]">
+				<os:store doc:name="Store" doc:id="5633c789-1130-4f91-927b-88f6c7415671" key="id" objectStore="Object_store_demo">
+					<os:value ><![CDATA[#[max(payload.*id)]]]></os:value>
+				</os:store>
+				<foreach doc:name="For Each" doc:id="5b4cfafe-2081-426e-bab8-42e214e1c32f" >
+					<file:write doc:name="Write" doc:id="cfc69458-8ffe-468e-9988-d9d824a32fcb" config-ref="File_Config" path='#[payload.id ++ "txt"]' mode="APPEND"/>
+					<ee:transform doc:name="Transform Message" doc:id="13b9d6fd-90c5-4954-9e35-65e3a566ac31" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Message": vars.SizeOfPayload as String ++ "inserted "
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+					<logger level="INFO" doc:name="Logger" doc:id="bc01135c-447a-45b8-b104-5a16b1b9c0c9" message="=================================================================="/>
+					<logger level="INFO" doc:name="Logger" doc:id="14bdd023-64dd-492d-a285-b15f2b7930f1" message="#[payload]"/>
+				</foreach>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="3a2ab4b0-d177-412c-aea4-c7a0d40cecc0" message='"NO new records found."'/>
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

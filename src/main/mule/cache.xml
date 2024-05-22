@@ -21,4 +21,15 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		</ee:cache>
 		<logger level="INFO" doc:name="Logger" doc:id="9944693e-f444-4a41-80d9-282ce38c6437" message="payload from the cache"/>
 	</flow>
+	<flow name="cacheFlow1" doc:id="fe1a0038-30bd-4ca6-b24c-426380b3609b" >
+		<http:listener doc:name="Listener" doc:id="b00421ae-56af-4b42-9929-8bcc5d0391c5" config-ref="HTTP_Listener_config1" path="/cacheDemo"/>
+		<set-variable value="1" doc:name="Set Variable" doc:id="288f30e4-8dd3-40c5-825c-99dcad32e458" variableName="id"/>
+		<ee:cache doc:name="Cache" doc:id="c1a884cc-140b-42f7-91ce-1be7020c2d7f" cachingStrategy-ref="Caching_Strategy">
+			<http:request method="GET" doc:name="Request" doc:id="ee645ce1-38d5-4076-8a14-62ecb53643d7" config-ref="HTTP_Request_configuration_google.com" path="/">
+				<http:body ><![CDATA[payload]]></http:body>
+			</http:request>
+			<set-variable value="#[attributes.statusCode]" doc:name="Set Variable" doc:id="fb3e665e-41bd-4557-b59a-e3c8d6e8022b" variableName="statusCode"/>
+		</ee:cache>
+		<logger level="INFO" doc:name="Logger" doc:id="0e2e6f3f-e8d2-4fef-a21b-31be30e9c65c" message="#[vars.statusCode]"/>
+	</flow>
 </mule>

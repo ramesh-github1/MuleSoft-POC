@@ -35,4 +35,25 @@ flatten(valuesOf(payload) map ((item, index) -> item.*payload))]]></ee:set-paylo
 		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="d48070fa-b0cd-4678-be3c-3f7d4c76ee09" />
 		<logger level="INFO" doc:name="Logger" doc:id="07b5c06a-6a34-4aa3-a66c-d35132b3aae0" message='"Logger Message after scatterGather.......": #[payload]'/>
 	</flow>
+	<flow name="scatterGatherFlow1" doc:id="b5f305bc-0bb3-448e-9b3a-092e5d495598" >
+		<http:listener doc:name="Listener" doc:id="ef271501-291e-481e-8aa9-cc210e7353cb" config-ref="HTTP_Listener_config1" path="/scatterGather/var"/>
+		<set-variable value="1" doc:name="Counter = 1" doc:id="b8d9f992-5f54-4ad9-9154-c8c484172383" variableName="counter"/>
+		<scatter-gather doc:name="Scatter-Gather" doc:id="ac2bdef0-af73-4ff6-8d3d-e142aeeddecf" >
+			<route >
+				<set-variable value="#[vars.counter + 1]" doc:name="counter  +1" doc:id="e1adcffe-4967-4795-a1a7-3399c0dab2b4" variableName="counter"/>
+			</route>
+			<route >
+				<set-variable value="#[vars.counter + 1]" doc:name="counter  +1" doc:id="b861138d-baf5-4c71-94de-4f49de288bc7" variableName="counter"/>
+			</route>
+		</scatter-gather>
+		<ee:transform doc:name="Transform Message" doc:id="11929ce6-0536-45d2-94a8-acb8f2da50ed" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="17db726b-74d0-47ef-8d71-304cdba86f31" message="#[vars.counter]"/>
+	</flow>
 </mule>

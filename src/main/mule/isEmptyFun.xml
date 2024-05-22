@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<flow name="isEmptyFunFlow" doc:id="60c75d5e-f400-446c-969b-2c096ef53f25" >
+		<scheduler doc:name="Scheduler" doc:id="1e83b261-f75a-4275-b3c5-ed752a3516d4" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="10" timeUnit="HOURS"/>
+			</scheduling-strategy>
+		</scheduler>
+		<ee:transform doc:name="Transform Message" doc:id="12bbe734-cd54-41cb-94fd-5b896b27ef3b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+[]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<validation:is-empty-collection doc:name="Is empty collection" doc:id="7b45ee0d-5109-4180-ba58-02883b965108" config-ref="Validation_Config" message="The Input is not an empty collection"/>
+		<logger level="INFO" doc:name="Logger" doc:id="38bc3f7c-5fae-4172-ba30-ed37b151d0a3" message="Completed"/>
+	</flow>
+</mule>

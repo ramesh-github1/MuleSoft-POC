@@ -12,9 +12,6 @@ http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/sc
 	<http:listener-config name="HTTP_Listener_config1" doc:name="HTTP Listener config" doc:id="99ca3a45-f216-4cd8-9d01-4e93cbfa5d7e" >
 		<http:listener-connection host="${host}" port="${port}" />
 	</http:listener-config>
-	<file:config name="File_Config" doc:name="File Config" doc:id="692fa98b-693d-41b9-a5c2-ee0f13d901f4" >
-		<file:connection workingDir="C:\Users\rv148\Desktop\temp\mule-file\ip" />
-	</file:config>
 	<http:request-config name="HTTP_Request_configuration_restAPI" doc:name="HTTP Request configuration" doc:id="5ddaaa55-bc17-453f-9157-e61b561a2297" basePath="${rest.basepath}" >
 		<http:request-connection host="${rest.host}"/>
 	</http:request-config>
@@ -25,9 +22,15 @@ http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/sc
 	</wsc:config>
 	<configuration-properties doc:name="Configuration properties" doc:id="ebe64b76-6c94-4110-8809-e30be612ef7f" file="${env}-config.properties" />
 	<global-property doc:name="Global Property" doc:id="9ed61c90-f2ca-41e5-8937-06e206597520" name="env" value="local" />
-	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="33911f46-2f6e-4bb2-b19a-d64e66463914" file="${env}-config.properties" key="${secure.key}" >
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="33911f46-2f6e-4bb2-b19a-d64e66463914" file="${env}-secure-config.properties" key="${secure.key}" >
 		<secure-properties:encrypt algorithm="Blowfish" />
 	</secure-properties:config>
+	<http:request-config name="HTTP_Request_configuration_google.com" doc:name="HTTP Request configuration" doc:id="673639c2-8bef-4534-9d8c-c0019a7c3dd0" >
+		<http:request-connection host="www.google.com" />
+	</http:request-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="9f8122eb-8bb5-4d03-ae84-ba9570779784" >
+		<file:connection workingDir="C:\Users\rv148\Desktop\temp\mule-file\ip" />
+	</file:config>
 
 	
 </mule>
