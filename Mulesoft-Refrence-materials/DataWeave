@@ -1,0 +1,237 @@
+Dataweave:
+DataWeave is a programming language designed by MuleSoft for accessing and transforming data that travels through a Mule application.
+
+selector: helps u to read/retrive the value from the input/payload.
+single-value selector: to retrive a value from an object.  		e.g, payload.key
+Index : to retrive a value from an array.(-ve index for reverse order)           e,g, payload[0][2]
+multivalue selector: works on Objects/arrays by getting the value for every key that matches, but it only works across the first level of nesting.
+			 e.g, payload.*key
+desecdants: descendants selector is the tool to use when you need to get the values of a particular key and all of its descendants with the same key. the descendants selector will only return one key per Object-level.     
+			 e.g, payload..key
+
+
+Single-value Selector - object.key
+Index Selector - array[index]
+Range Selector - array[startIndex to endIndex]
+Multi-value Selector - value.*key
+Descendants Selector - value..key
+
+-----------------------------------
+
+
+flow selector:
+if (<criteria_expression>) <return_if_true> else <return_if_false>
+if(payload.key > 500) "success" else "false"
+
+function:
+fun sayHello(name) =
+  "Hello " ++ name
+
+lambda function: same as a function without the function_name. In order to execute lambda function enclose it with paranthesis() and append () at the end. 
+		lambda function: ()-> 2+3,  to execute  (()-> 2+3)(),   In general ((n,m)-> n+m)(2,3)
+		Note: lambda's become useful when you want to pass functions as arguments to other functions, or return a function from another function this is know as Higher Order function.
+		
+---------------------------------------------------------------------------------------------------	
+Payload 
+
+array
+[
+  1,
+  2,
+  3,
+  "apple",
+  "banana",
+  {
+    "name": "John",
+    "age": 25,
+    "city": "New York"
+  },
+  {
+    "name": "Alice",
+    "age": 30,
+    "city": "San Francisco"
+  }
+]
+
+
+Object
+{
+  "name": "John Doe",
+  "age": 28,
+  "address": {
+    "street": "123 Main St",
+    "city": "Anytown",
+    "zip": "12345"
+  },
+  "isStudent": false,
+  "grades": [85, 90, 78],
+  "contacts": [
+    {
+      "type": "email",
+      "value": "john.doe@example.com"
+    },
+    {
+      "type": "phone",
+      "value": "555-1234"
+    }
+  ]
+}
+
+
+-------------------------------------------------------------------------------------------------------
+
+valueOf: returns an array of value from key:value pairs of object.
+
+%dw 2.0
+output application/json
+---
+{ "valuesOf" : valuesOf({a: true, b: 1}) }
+
+output:
+{ "valuesOf" : [true,1] }
+
+--------------------------------
+
+map : to itearate all the elements of an array and returns an array. 
+	use 'map()' to modify the existing value of the array and 'map ({})' to create a object containing key/value from the array.
+	'$' refers to the value/payload and '$$' refers as the index of the array.
+
+%dw 2.0
+output application/json
+fun processValue(item) = 
+	if (item is Number) item + 1
+    else item
+---
+payload map ( ()-> if ($ is Number) $+1
+                       else  $  )
+
+-------------------------------------------------------------------------------------------
+
+mapObject: use when we want to change the keys and/or values on an Object to be something else. mapObject takes in an Object, and a lambda that takes in 3 parameters: a value 	( V ), a key ( K ), and an index ( Number ) and returns a new Object. Finally, the entire function returns the transformed Object.
+		payload mapObject ((value, key, index) -> 
+    						(upper(key)): upper(value)
+		)
+
+
+
+--------------------------------------------------------------------------------------------
+
+
+filter: To use filter, you will need to pass two arguments: an Array of any type and a function (or a condition) to filter the data with.
+ The result will be of the same type as the input Array. For example, if you pass an Array of Numbers (Array<Number>), the result will also be an Array of Numbers, but it will contain just the filtered data according to the condition (or the second argument).
+	e.g [1,2,3,4] filter ((item, index) -> item>3)
+	    [1,2,3,4] filter ((item) -> item>3)
+	    [1,2,3,4] filter $>3
+
+filterObject: The filterObject function is similar to the filter function, but instead of removing items from Arrays, the filterObject function removes key:value pairs	from Objects.
+	e.g payload filterObject ((value, key, index) -> key != "age")
+
+%dw 2.0
+output application/json
+var arr= [1,2,3,4,5,5,5]
+---
+{ Distinct: arr distinctBy ((item, index) -> item filter $ > 3),
+ filterObj: payload filterObject ((value, key, index) -> value != null),
+ filterr: arr filter ((item, index) -> item > 3),
+ mapp: arr map {}
+}
+---------------------------------------------------------------------------------------------------------
+
+pluck: converts an object into an array.
+	pluck (value,key,index) - >  {(index) : {(value):key} }
+
+groupBy: The groupBy function is useful for grouping together items based on some value that you define.
+	 groupBy does not return an Array or any of the given input values. It always returns an Object.
+	 it returns an Object whose keys are the type of the values returned from the lambda (R), and the values are the type of the input data type.
+	 e.g. [1,2,3,4,4,2,5,1]	groupBy isEven($)
+
+%dw 2.0
+output application/json
+---
+payload filterObject (() -> $$ != null and $$$ > 2 and $ is Array) 
+        groupBy $$ pluck ((value, key, index) -> (index): {(key): value} )
+
+----------------------------------------------------------------------------------------------------
+
+reduce: Reduce allows us to iterate an array to accumulate a result. There are a few array operators like filter and map that do similar functions. The reduce() method returns a single value i.e, the function's accumulated result
+	reduce (array_item,acc) -> return acc
+
+---
+
+lookup: Similar to the Flow Reference component (recommended), the lookup function enables you to execute another flow within your app and to retrieve the resulting 	payload. It takes the 	flow's name and an input payload as parameters.
+ For example, lookup("anotherFlow", payload) executes a flow named anotherFlow (only private flow).
+
+---
+
+flatten: to move the elements from subarray to parent array, eliminate the subarrays and convert all the key/value into a list of objects within the parent array(simply to merge two arrays)
+	eg: flatten(arrayname)
+
+---
+
+splitBy: To convert string to array you can use SplitBy function of dataweave 2.0
+		splitBy(".")
+
+---
+
+joinBY: You can use joinBy Dataweave 2.0 function to convert array to string
+
+		 joinBy ("-")
+
+----
+
+
+distinctBy: The distinctBy function is useful when you need to remove duplicate items from an Array. It takes two parameters: an Array and a lambda. The lambda passed to distinctBy should return a value that is unique to each item in the input Array.
+
+	    e.g [1,2,2,3,3,3,4,4,4,4,5,5,5,5,5] distinctBy ((num, index) -> num)
+		[1,2,2,3,3,3,4,4,4,4,5,5,5,5,5] distinctBy ((num) -> num)       - is it not always req to include every field in the right though we don't make use of.
+		[1,2,2,3,3,3,4,4,4,4,5,5,5,5,5] distinctBy  $
+
+
+
+
+
+%dw 2.0
+output application/json
+
+var sentence = "how are you doing"
+---
+{
+    "string created with reduce" : ['h', 'e', 'l', 'l', 'o'] reduce( (value, acc) ->  acc ++ value),
+     "string created with reduce" : ['h', 'e', 'l', 'l', 'o'] reduce($$ ++ $),
+    "string created with joinby" : ['h', 'e', 'l', 'l', 'o'] joinBy  (""),
+    "words created by splitBy" : sentence splitBy (" "),
+    "sentence processed by splityby filter and reduce" : sentence splitBy  (" ") filter $ != "are"  reduce ($$ ++" "++ $),
+    "sentence processed by splitBy filter and joinBy": sentence splitBy  (" ") filter $ != "are" joinBy (" ")
+}
+
+output: 
+{
+  "string created with reduce": "hello",
+  "string created with reduce": "hello",
+  "string created with joinby": "hello",
+  "words created by splitBy": [
+    "how",
+    "are",
+    "you",
+    "doing"
+  ],
+  "sentence processed by splityby filter and reduce": "how you doing",
+  "sentence processed by splitBy filter and joinBy": "how you doing"
+}
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+json to xml: add a root element
+json array to xml : add root element and {( )}
+xml to java: remove {( )} if this is present
+when u see only one element from an array/xml in the output, include '*' to display all the elemnts in the array.
+include the '..' successor operation to access the subarray or subObject.
+
+
+
+========================================================================================================
+
+
