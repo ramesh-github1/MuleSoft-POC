@@ -235,3 +235,135 @@ include the '..' successor operation to access the subarray or subObject.
 ========================================================================================================
 
 
+%dw 2.0
+import * from dw::util::Values
+output application/json
+var list1 = [2,5,6,84,859,42,17,86,91,589]
+var list2 = [2,5,6,84,42,17,86,91,254]
+var str = "a12b34c56"
+var IP = "192,50.20/99"
+var obj1 = {
+  "name":"AMulya",
+  "class": 12,
+  "School": "DPS",
+  "Country": "INDIA",
+  "Phone": 852369741
+}
+var obj2 = {
+  "name":"AMulya",
+  "class": 12,
+  "School": "DPS",
+  "Country": "INDIA",
+  "Phone": 852369741
+}
+var obj3 = [{
+  "name":"Bhagath",
+  "class": 12,
+  "School": "DPS",
+  "Country": "INDIA",
+  "Phone": 125463987
+},
+ {
+  "name":"AMulya",
+  "class": 12,
+  "School": "DPS",
+  "Country": "INDIA",
+  "Phone": 852369741
+}]
+---
+{
+    "keys":keysOf(obj1),
+    "values": valuesOf(obj1),
+    "only Int": (flatten(str scan  /\d/) joinBy ("")) as Number,
+    "regExp": IP splitBy  /[,.\/]/,
+    "VAr_OBject":obj1,
+    "order": list1 orderBy ((item, index) -> item), 
+    "rmove a obj": obj1 - /Phone/ - /Country/,
+    "merge two arrays": (flatten(list1+list2) distinctBy ((item, index) -> item) 
+                         filter ((item, index) -> item > 50) orderBy ((item, index) -> item))[-1 to 0],
+    "merge  objects in an array": obj3 reduce ((item, accumulator) ->  item ++ accumulator ),
+    "swap key/value": obj3 map ((item, index) -> item mapObject ((value, key, index) -> (value): key))
+}
+
+
+// ====================================common functions========================================
+
+%dw 2.0
+var myString = "mycompany.com"
+output application/json
+---
+{
+	"contains" : myString contains(/c.m/),
+	"find" : myString find(/[m|n].|m$/),
+	"match" : myString match(/([a-z]*).[a-z]*/),
+	"matches" : myString matches(/([a-z]*).[a-z]*/),
+	"replaceWith" : myString replace /\..*m/ with ".net",
+	"scan" : myString scan(/([a-z]*).(com)/),
+	"splitBy" : myString splitBy(/[.\/]/)
+}
+
+{
+  "contains": true,
+  "find": [
+    [
+      0
+    ],
+    [
+      4
+    ],
+    [
+      7
+    ],
+    [
+      12
+    ]
+  ],
+  "match": [
+    "mycompany.com",
+    "mycompany"
+  ],
+  "matches": true,
+  "replaceWith": "mycompany.net",
+  "scan": [
+    [
+      "mycompany.com",
+      "mycompany",
+      "com"
+    ]
+  ],
+  "splitBy": [
+    "mycompany",
+    "com"
+  ]
+}
+
+// ====================================common functions========================================
+
+
+
+
+
+
+
+// ====================================Prime Number========================================
+%dw 2.0
+output application/json
+var arr = 2 to payload.number/2
+var rem = arr map ((item, index) -> payload.number mod 2)
+---
+if ( payload.number == 2 ) "Prime"
+else if (rem contains 0) "Not Prime"
+else "Prime"
+
+// ====================================Factorial===========================================
+%dw 2.0
+output application/json
+var fact = (1 to payload.number) [-1 to 0]
+---
+"factorials": fact reduce ((item, accumulator) -> item * accumulator)
+
+// ====================================MOst repeated String===========================================
+%dw 2.0
+output application/json 
+---
+sizeOf(((valuesOf(payload.Message splitBy  "" groupBy ((item, index) -> item))) orderBy ((item, index) -> sizeOf(item)))[-1])

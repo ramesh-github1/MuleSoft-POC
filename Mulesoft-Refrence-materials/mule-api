@@ -1,0 +1,414 @@
+
+API stands for Application Programming Interface. It is a set of rules and tools that allows different software applications to communicate with each other. APIs define the methods and data formats that applications can use to request and exchange information. APIs play a crucial role in enabling the integration of different software systems, allowing them to work together and share data seamlessly..
+
+
+APIs and web services
+1.Communication Over a Network
+2.limited accessibility
+3.Architecture and format
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+SOAP (Simple Object Access Protocol) and REST (Representational State Transfer) are two different styles of web service architectures used for building APIs (Application Programming Interfaces) that allow different software applications to communicate with each other over a network.
+
+
+SOAP (Simple Object Access Protocol):
+Protocol: SOAP is a protocol, which means it has a defined set of rules for structuring messages that are sent between applications.
+Standards: It follows standards like WSDL (Web Services Description Language) for describing the functionalities offered by a web service.
+XML: SOAP messages are typically formatted as XML (eXtensible Markup Language).
+Stateful: SOAP is inherently stateful, meaning each request from a client to a server includes all necessary information for the server to fulfill the request.
+Complexity: SOAP APIs tend to be more complex due to the extensive specification, which includes features like security and transaction support.
+Tool Support: SOAP has good tooling support and is often used in enterprise environments where formal contracts are important.
+Error Handling: SOAP has built-in error handling through the use of standardized fault elements.
+
+REST (Representational State Transfer):
+Architectural Style: REST is an architectural style rather than a protocol, emphasizing stateless interactions between clients and servers.
+Stateless: Each request from a client to a server must contain all the information necessary to understand and fulfill the request, meaning no client context is stored on the server between requests.
+HTTP Methods: REST APIs use standard HTTP methods like GET, POST, PUT, DELETE, etc., for CRUD (Create, Read, Update, Delete) operations on resources.
+Data Formats: REST APIs can use various data formats such as JSON (JavaScript Object Notation), XML, plain text, etc., but JSON is most common due to its lightweight nature.
+Simplicity: REST is often considered simpler and easier to understand compared to SOAP because it doesn't require as much overhead.
+State Transfer: REST emphasizes the transfer of representations of resources, rather than actual objects.
+Caching: REST has built-in support for caching to improve performance.
+Tool Agnostic: REST is more tool-agnostic, meaning it can be used with almost any programming language or framework.
+
+When to Use Each:
+SOAP: Use SOAP when you need strong security, ACID compliance (Atomicity, Consistency, Isolation, Durability), and built-in error handling. It's often used in enterprise systems, especially when interacting with legacy applications or when formal contracts are necessary.
+
+REST: Use REST when simplicity, flexibility, and scalability are important. It's commonly used for public APIs, web services, and applications that need to scale. REST is also a good choice for mobile applications due to its lightweight nature.
+
+In summary, SOAP is more rigid and formal, designed with enterprise-level requirements in mind, while REST is simpler, more flexible, and often preferred for web APIs, especially when working with web and mobile applications. The choice between SOAP and REST depends on the specific needs of the project, including factors such as security, performance, scalability, and existing infrastructure.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+MuleSoft provides the most widely used integration platform for connecting SaaS & enterprise applications in the cloud and on-premise.
+
+API led connectivity
+System/API Layer:
+This layer deals with the existing systems, applications, and data sources within the organization.
+It involves exposing these assets as discoverable and reusable APIs. These APIs act as the building blocks for integration.
+
+Process Layer:
+The process layer is responsible for composing APIs into higher-level business processes.
+It defines how different APIs interact to achieve specific business functionalities.
+The layer is often organized into reusable process APIs that encapsulate specific business logic.
+
+Experience Layer:
+The experience layer focuses on creating a consistent and user-friendly interface for developers or consumers who use the APIs.
+It involves creating experience APIs that expose the necessary data and functionality in a way that is easy to understand and consume.
+
+Download and install mule runtime on-premise
+1:Download the runtime from the offical website and unzip it.
+The initial conifgurations will be present in the config/wrapper file.
+2: open cmd promt from the /bin folder in the mule file that is unzipped and start the mule instance  by 'mule' cmd.
+3: Login to the anypoint platform and through runtime manager install the mule agent to the server where u have installed the runtime.
+4. Then, u can deploy ur application to the mule runtime  through runtime manager from anypoint platform. 
+Note:
+-> Also, u can group ur sevres in the runtime manager and deploy ur app to the group (which antomaticaly delpoys the app to all the servere in the group). By this we can distribite the load by using load balancers within the group.
+->By adding the servers to cluster instead of grouping, u don't need a load balancer to distribute the load, the cluster handels itself(soft load balancing).
+
+
+Design Center   ----> Anypoint Exchange ---> Anypoint Studio ---> (API Manager to apply policies and Analytics) ---> Runtime Manager 
+
+
+Notes:
+
+Anypoint studio is a platform where u  can develop ur APIs that has as mule runtime installed in it to test.
+After developing export ur code in a deployable archive format.
+Then deploy it in on-premises or cloudhub.
+----------------------------------------------------------------------------------------------------------------------------
+
+mule event structure
+
+mule event:
+    mule message 
+        attributes
+        payload
+    variables
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Notes:
+In object store: entry TTL is the time up to which the value stored is valid and expiration time is the time interval at which a mule thread will run to remove the expired/invalid data in the object store.
+By default, oject store will store data to max of 30 days from received/accessing it. Accessing the message in the last 7 days of 30, extends the day by 30.
+-----------------------------------------------
+
+Trust Store:
+Stores certificates from trusted Certificate Authorities (CAs) or self-signed certificates of other parties that your application trusts.
+Used by clients to verify the identity of servers they are connecting to.
+Contains public keys of trusted CAs.
+
+Key Store:
+Stores private keys, public keys, and related certificates.
+Used by servers to present their own certificates to clients for authentication.
+Contains private keys, server certificates, and sometimes the CA certificates that issued them.
+
+ trust stores are used for verifying the identity of other parties (such as servers), while key stores are used for providing your own identity (such as servers presenting their certificates) in secure communications.
+
+-----------------------------------------------
+Behaviour of attributes, payload and variables.
+1.using flow reference
+When passing from parent flow to child flow using flow reference, Child flow can be a flow, a sub-flow, or a private flow. For all these flows as a child flows, payload, variables, and attributes behave in the same way.
+Let’s assume in parent flow we have some Attributes, Payload, and Variables set. when we pass to the child flow using Flow reference, All can be accessed in the child flow, payload and variable can be modified in child flow and when returned to the parent flow, the changes are reflected in parent flow as well.
+
+2.using http request
+When passing from parent flow to child flow using HTTP Request, Attributes are updated. attributes at starting in parents flow are not equal to attributes, Payload goes as it is and can be modified in child flow as well. Variable cannot be passed as a variable(you can pass it using attributes for the request, but not as a Variable) because HTTP request has only attributes and payload in its body. As the variable is not passed, it cannot be accessed or modified from child flow. When coming back to calling flow(parent flow), modified payload and variable (which was not passed to child flow) can be accessed and modified in the parent flow.
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Correlation ID
+When Mule creates a new event, it generates a unique identifier string called a correlation ID before sending the event to the next processor in the flow. This ID enables you to correlate different log entries with a particular execution.
+
+Use the correlation ID to understand the entire history of an event that resulted in an issue or an unhandled error (all errors include the correlation ID of the event that triggered it). Also, knowing the correlation ID helps you perform a memory analysis of heap dumps.
+
+To obtain a correlation ID, Mule first checks for one in the source message (for example, a JMS message or an HTTP listener with the X-CORRELATION-ID header). If the source does not set a correlation ID, Mule generates one using the correlation ID generator.
+
+------------------------------------------   
+
+1. for each scope:
+
+The For Each scope splits a payload into elements and processes them one by one through the components that you place in the scope.
+
+By default, For Each tries to split the payload. If the payload is a simple Java collection, the For Each scope can split it without any configuration. The payload inside the For Each scope is each of the split elements. Attributes within the original message are ignored because they are related to the entire message.
+For Each does not modify the current payload. The output payload is the same as the input.
+For non-Java collections, such as XML or JSON, use a DataWeave expression to split data. Use the Collection field for this purpose.
+
+If one of the elements in a collection throws an exception, the For Each scope stops processing that collection and invokes the error handler.
+
+------------------------------------------
+
+2. choice router scope:
+The Choice router dynamically routes messages through a flow according to a set of DataWeave expressions that evaluate message content.
+similar to an if/then/else code block in most programming languages.
+
+Only one of the routes in the Choice router executes, meaning that the first expression that evaluates to true triggers that route’s execution and the others are not checked. If none of the expressions are true, then the default route executes.
+
+--------------------------------------------
+
+3. scatter gather scope:
+The Scatter-Gather component receives a Mule event and sends a reference of this Mule event to each processing route.
+
+Each of the processing routes starts executing in parallel. After all processors inside a route finish processing, the route returns a Mule event, which can be either the same Mule event without modifications or a new Mule event created by the processors in the route as a result of the modifications applied.
+
+After all processing routes have finished execution, the Scatter-Gather component creates a new Mule event that combines all resulting Mule events from each route, and then passes the new Mule event to the next component in the flow.
+
+After all routes complete, the component outputs the results in the following format: {0: messageFromRoute0, 1: messageFromRoute1, …​}
+
+flatten(valuesOf(payload) map ((item, index) -> item.*payload))
+
+
+Error handling:
+The routes in a Scatter-Gather component each contain a Try scope.
+One of the routes generates an error that is successfully handled by that route’s Try scope through an on-error-continue error handler, so the route is completed successfully. The Scatter-Gather component consolidates the Mule events from all routes into a new Mule event and passes the consolidated event to the next event processor.
+
+One of the routes in a Scatter-Gather component does not contain a Try scope or contains a Try scope with an error handler that cannot handle the error type, or the error handler is an on-error-propagate type.
+An error occurs in this route, causing the route to fail, which in turn causes the Scatter-Gather component to throw a MULE:COMPOSITE_ROUTING error. The flow branches to your error-handling event processors, which are able to process the Mule events from the completed routes.
+
+
+--------------------------------------------
+
+
+4. Batch Processing
+Mule batch processing components are designed for reliable, asynchronous processing of larger-than-memory data sets. The components are the Batch Job, Batch Step, and Batch Aggregator. The Batch Job component automatically splits source data and stores it into persistent queues, which makes it possible to process large data sets while providing reliability.
+
+
+Mule has three options for handling a record-level error:
+
+Finish processing: Stop the execution of the current job instance. Finish the execution of the records currently in-flight, but do not pull any more records from the queues and set the job instance into a FAILURE state. The On Complete phase is invoked.
+
+Continue processing the batch regardless of any failed records, using the acceptExpression and acceptPolicy attributes to instruct subsequent batch steps how to handle failed records.
+
+Continue processing the batch regardless of any failed records (using the acceptExpression and acceptPolicy attributes to instruct subsequent batch steps how to handle failed records), until the batch job accumulates a maximum number of failed records at which point the execution will halt just like in option 1.
+
+By default, Mule’s batch jobs follow the first error handling strategy which halts the batch instance execution
+
+
+
+----------------------------------------------------
+WaterMarking
+Water marking is typically used for data synchronization.
+e.g, when polling data from a legacy resource to retrive new data and insert into destination endpoint. The WaterMarking techinques store and retrive the  point at which  a perodic synchronization resumes the next time it executes.
+
+Automatic WaterMarking : on table row 
+Manual WaterMarking:  use object store and retrive a attribute that uniquely identifies the rec. 
+-----------------------------------------------------------
+
+Log4j levels : Debug,Info,Warn,Error,Fatal,Off
+
+
+--------------------------------------------------------------
+
+Mule Streaming
+https://dzone.com/articles/streaming-in-mule-4-processing-large-data-sets
+
+
+
+===================================================================================================================================================
+
+Deployment Options in mule
+
+
+When you run an application in Anypoint Studio, it deploys to an embedded test server in Studio. Because this server is not meant for production deployment and uptime restrictions apply, deploy your Mule applications using one of the deployment options supported by Anypoint Runtime Manager.
+
+1. CloudHub 2.0
+2. CloudHub
+3. Hybrid Deployments
+4. Anypoint Platform Private Cloud Edition
+5. Anypoint Runtime Fabric Deployments
+
+
+
+CloudHub 2.0
+CloudHub 2.0 is a fully managed, containerized integration platform as a service (iPaaS) where you can deploy APIs and integrations as lightweight containers in the cloud.
+You can deploy your applications from the Anypoint Platform  Runtime Manager cloud console and host them in CloudHub 2.0. For more information about how to deploy applications to CloudHub 2.0, see Deploying Apps to CloudHub 2.0.
+
+
+CloudHub
+CloudHub is a complete integration platform as a service (iPaaS) that provides server functionality for you to deploy your applications without having to configure a hosting environment. Based on your contract, you control how many resources to assign to your application.
+You can deploy your applications from the Anypoint Platform Runtime Manager cloud console and host them in CloudHub. For more information on how to deploy applications to CloudHub, see Deploy to CloudHub.
+
+
+Hybrid Deployments
+With the hybrid deployment option, you deploy your applications from the Runtime Manager cloud console to your Mule servers and use Runtime Manager to manage them. This option provides you with flexibility and control over your on-premises security but requires you to provide the hosting infrastructure.
+To use the hybrid option, you first register your Mule servers with the Runtime Manager agent. Then, from Runtime Manager, you can optionally add those servers to server groups or clusters to provide high availability. Finally, you deploy your applications from Runtime Manager to either a server, server group, or cluster.
+
+
+Anypoint Platform Private Cloud Edition
+Anypoint Platform Private Cloud Edition is a containerized distribution of the management and engagement capabilities of Anypoint Platform that you host on-premises or in your organization’s private cloud environment.
+If your organization has strict regulatory or compliance requirements that limit the use of cloud solutions, you can use Anypoint Platform PCE to deploy and host your applications on-premises.
+
+
+Anypoint Runtime Fabric Deployments
+Anypoint Runtime Fabric is a container service that automates the deployment and orchestration of Mule applications and API gateways. Runtime Fabric runs within a customer-managed infrastructure on AWS, Azure, virtual machines (VMs), and bare-metal servers.
+Runtime Fabric contains all of the components it requires. These components, including Docker and Kubernetes, are optimized to work efficiently with Mule runtimes and other MuleSoft services.
+To use the Runtime Fabric option, you first create a Runtime Fabric using Runtime Manager. Then, you install Runtime Fabric on your infrastructure. Finally, you deploy your applications from the Runtime Manager cloud console to the Runtime Fabric you created.
+You can deploy your applications from the Anypoint PlatformLeaving Runtime Manager cloud console and host them in Anypoint Runtime Fabric. For more information on how to deploy applications to Runtime Fabric, see Deploy Mule Applications to Runtime Fabric.
+
+
+
+
+
+
+
+
+
+
+==============================================================================================================================
+MUnit Operations:
+
+Test: Creates a new test “flow” broken down into three sections: Execution, Behavior, and Validation. The behavior scope sets all the preconditions before executing the test logic. The execution scope contains the testing logic which will wait for all processes to finish before executing the next scope. The validation scope contains all the validations for the results of the execution scope.
+
+Set Event: Allows you to define a Mule Event. Usually used at the beginning of an MUnit test to define the first message to send to the flow being tested.
+
+Set null payload: Defines a null payload to test how your flow will handle a null value.
+
+After Suite: Runs after executing all of the MUnit tests and runs just once. For instance, let’s suppose you have an MUnit Test Suite File with four tests. The code inside an MUnit After Suite, runs just once, after all of your tests.
+
+After Test: Runs after executing an MUnit test. For instance, let’s suppose you have an MUnit Test Suite file with four tests. The code inside an MUnit After Test runs after each of your four tests; it runs four times.
+
+Before Suite: Runs before executing all of the MUnit tests and runs just once. For example, suppose you have an MUnit Test Suite file with four tests. The code inside an MUnit Before Suite runs just once, before all of your four tests.
+
+Before Test: Runs before executing an MUnit test. For instance, let’s suppose you have an MUnit Test Suite file with four tests. The code inside an MUnit Before test runs before each of your four tests; it runs four times.
+
+==============================================================================================================================
+MUnit Tools:
+
+Assert That: Allows you to run assertions to validate the state of a Mule event, such as checking to see if a payload equals a certain value.
+
+Fail: Useful in validating that a test should fail if that point is reached in the flow. The processor throws a java.lang.AssertionError.
+
+Mock When: Use this processor to mock an event, such as sending a mock POST request with a mocked payload.
+
+Run Custom: Allows you to assert the Mule event content against a custom assertion.
+
+Verify Call: Allows you to verify if a processor was called.
+
+Spy: Allows you to see what happens before and after an event processor is called in your Flow. Usually, you will tell the Spy processor to run a set of instructions before and after the execution.
+
+======================================================================================================================
+
+
+
+MDC(Mapped Diagnostic Context) logging
+MDC allows to enrich log messages with contextual info that can be dynamically added and removed as the application executes.
+
+---------------------
+
+lines funtion: the line fun takes string as an arg and returns an array of strings.
+
+%dw 2.0
+import * from dw::core::Strings
+output application/json
+var myString = "Hello, \n this is a \n sample \n String"
+---
+lines(myString)
+
+output
+[
+  "Hello, ",
+  " this is a ",
+  " sample ",
+  " String"
+]
+----------------------------------
+
+-------------------------------
+In MuleSoft, when designing integrations, you have several options for managing the flow of data and messages. Webhooks, JMS (Java Message Service) queues, and VM (Virtual Machine) queues are all mechanisms for handling communication and messaging, each with its own use cases and characteristics.
+
+Webhooks:
+Purpose: Webhooks are a way for an application to provide other applications with real-time information.
+How it works: When an event occurs in the source application (e.g., data updated, a new item created), it sends an HTTP POST payload to a URL configured in the target  application.
+
+Use Cases:
+Real-time event-driven architectures.
+Integration with external services that provide webhook notifications.
+Pros:
+Real-time notifications.
+Simple to set up.
+Cons:
+Relies on the source system to send notifications reliably.
+Can be less reliable if the target system is not reachable or experiences downtime.
+
+
+JMS Queue:
+Purpose: JMS is a messaging standard that allows Java EE applications to create, send, receive, and read messages.
+How it works: Messages are sent to a JMS queue by a producer application and consumed by one or more consumer applications.
+Use Cases:
+    Asynchronous communication between applications.
+    Decoupling of applications, so they don't need to know about each other.
+Pros:
+    Reliable message delivery.
+    Supports transactions and acknowledgments.
+    Ensures messages are not lost if a system fails.
+Cons:
+    Requires a message broker (like ActiveMQ, RabbitMQ, or others).
+    More setup and configuration compared to simpler methods like webhooks.
+
+
+VM Queue (Virtual Machine Queue):
+Purpose: VM queues are in-memory queues within the Mule application itself.
+How it works: Messages are stored in memory and can be passed between different parts of the Mule flow.
+Use Cases:
+    Passing messages within the same Mule flow or application.
+    Temporary storage of messages.
+Pros:
+    Fast and lightweight.
+    No external dependencies.
+    Useful for passing messages between components within the same application.
+Cons:
+    Messages are lost if the Mule application restarts.
+    Not suitable for long-term or persistent messaging needs.
+
+
+Comparison:
+Webhooks are ideal for real-time event notifications from external systems, providing a push-based approach.
+JMS Queues are suitable for asynchronous communication between applications, especially when reliability and guaranteed delivery are crucial.
+VM Queues are used for lightweight in-memory messaging within a single Mule application, often for passing messages between different components or flow parts.
+When choosing between these options in MuleSoft, consider factors such as the need for real-time updates, reliability, scalability, and whether the messages need to be stored persistently or can be handled in-memory. Each option serves different purposes, and the choice depends on the specific requirements of your integration scenario.
+
+
+
+----------------------------------
+Real Time Processing huge data via API
+
+
+Mule is a lightweight enterprise service bus and integration framework provided by MuleSoft. The platform is Java-based and hence makes use of the JVM for process execution. It is the fundamental task in MuleSoft to integrate different systems, and there are scenarios where we take data from one system, then process it, and finally load it into another system (ETL), where these source and end systems can be Database, Salesforce, SFTP/FTP or Files. There can be various approaches we can adopt to achieve the above goal. But when processing a reasonable amount of data, one of the concerns designers and developers need to address is the potential of retrieving an enormous number of results in a single load session because if the size of the data being loaded into the JVM Heap Memory exceeds its size, we get the memory out of bound exception, our application crashes, and the process execution fails.
+
+1. Custom File Splitter
+Suppose we have a large file, say 10GB CSV, so it is obvious if this amount of data is loaded into the memory, the application would crash owing to storage considerations. What we can do is use a custom Java Logic or even a file splitter exe file to split the file into smaller volumes of data so that it is accommodatable in the memory and the process execution succeeds.
+
+2. Pagination
+Let's explain this technical concept using layman's terms. Suppose we search a particular phrase on Google, and it displays “some million number of records in some seconds.” But it doesn’t show them in one go. Instead, it splits the records into pages, say 0-10 records on Page 1, 10-20 records on Page 2, and so on. This essentially is pagination. If we are reading data from DB, we can process it using pagination logic so as to retrieve the records in batches of set size again to satisfy the need to be able to accommodate it in the memory.
+
+Pagination makes use of offset and limit (these terms are specific to MySQL, oracle DB has offset and fetchNext), where the offset is the initial record from which the retrieval is to be started, and the limit is the number of records to be fetched in one go.
+
+Initially, it looks like the above solutions might effectively address our problems. But, it is not always a good idea to use a custom splitter for file processing. Also, pagination leads to the same problem of heap memory overflow when there are a large number of concurrent requests, thus leading our application to crash. For example, We have a SAPI that retrieves 100 records from the DB (that has 10,000 records) as per the pagination logic, but at the same time, it has an SLA to serve up to 100 requests per second. This 100 req per second X 100 records = 10,000 records which might again lead to a memory exception. Therefore, we came up with the Streaming logic to solve the problem of processing large data sets.
+
+What Is Streaming?
+Streaming is the process where we refer to the data as its bytes arrive at the flow rather than scanning and loading the entire document to index it. Streaming speeds up the processing of large documents without overloading the data into memory. It helps to process a large set of data with low resource consumption in an efficient manner. 
+
+As we have a cursor that points to the instance of data being processed, the whole data is not loaded into the memory, so, essentially, there is a very slight chance that this would lead to the heap memory being overloaded. This cursor is encapsulated in a stream, an object which is at the core of the concept of streaming.
+
+Types of Streaming in Mule 4
+There are three types of Streams in Mule 4:
+1. Non Repeatable Stream (available in Mule 3 also)
+2. Repeatable In-Memory Stream
+3. Repeatable File Stored Stream
+The latter two are new to Mule 4 and hence exclusive to it.
+
+Streams and iterables
+Binary Streaming: Binary streams have no understanding of the data structure in their stream. This is typical of the HTTP, File, Sockets, and SFTP modules.
+Object Streaming: Object streams are effectively Object iterables. They are configurable for operations that support paging like the Database select operation or the Salesforce query operation.
